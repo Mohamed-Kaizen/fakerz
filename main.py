@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from fakerz import settings
+from fakerz.settings import settings
 from profiles import views as profiles_views
 
 app = FastAPI(

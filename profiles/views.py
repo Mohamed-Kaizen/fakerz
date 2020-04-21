@@ -1,10 +1,10 @@
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import httpx
 from faker import Faker
-from fakerz.settings import logger
+from fakerz.settings import logger, settings
 from fastapi import APIRouter
-
+from . import schema, utils
 router = APIRouter()
 
 fake = Faker()
@@ -15,7 +15,7 @@ async def get_image(*, width: int, height: int) -> httpx.Response:
 
     client = httpx.AsyncClient()
 
-    return await client.get(f"https://source.unsplash.com/{width}{height}/?face")
+    return await client.get(f"https://source.unsplash.com/{width}x{height}/?face")
 
 
 @router.get("/")
@@ -49,3 +49,17 @@ async def get_profile(
 
     except AttributeError as error:
         logger.opt(exception=True).exception(error)
+
+
+@router.post("/login/")
+async def login(user_input: schema.UserLogin) -> Dict[str, Any]:
+
+    access_token = utils.create_access_token(
+        data={"sub": user_input.email, "username": fake.name()},
+        expires_in_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
+    )
+    client = httpx.AsyncClient()
+
+    response = await client.get(f"https://source.unsplash.com/800x400/?profile")
+
+    return {"access_token": access_token, "token_type": "bearer", "username": fake.name(), "image": f"https://images.unsplash.com{response.url.full_path}",}

@@ -1,30 +1,56 @@
 from typing import List
 
-from decouple import Csv, config
+from pydantic import BaseSettings
 from loguru import logger
 
-PROJECT_NAME = "fakerz"
 
-PROJECT_DESCRIPTION = "Fake API server"
+class Settings(BaseSettings):
 
-PROJECT_VERSION = "0.1.0"
+    PROJECT_NAME: str = "fakerz"
 
-DOCS_URL = "/docs"
+    PROJECT_DESCRIPTION: str = "Fake API server"
 
-REDOC_URL = "/redoc"
+    PROJECT_VERSION: str = "0.1.0"
 
-OPENAPI_URL = "/openapi.json"
+    DOCS_URL: str = "/docs"
 
-ALLOWED_HOSTS: List = config(
-    "ALLOWED_HOSTS", cast=Csv(str), default="127.0.0.1, localhost"
-)
+    REDOC_URL: str = "/redoc"
 
-DEBUG = config("DEBUG", cast=bool, default=True)
+    OPENAPI_URL: str = "/openapi.json"
 
-CORS_ORIGINS = ["*"]
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = ["*"]
-CORS_ALLOW_HEADERS = ["*"]
+    ALLOWED_HOSTS: List[str] = ["127.0.0.1", "localhost"]
+
+    DEBUG: bool
+
+    SECRET_KEY: str
+
+    CORS_ORIGINS: List[str] = ["*"]
+
+    CORS_ALLOW_CREDENTIALS: bool = True
+
+    CORS_ALLOW_METHODS: List[str] = ["*"]
+
+    CORS_ALLOW_HEADERS: List[str] = ["*"]
+
+    # Don't decrease this number unless you have a good reason not to.
+    # Please read
+    # https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#maximum-password-lengths
+    MINIMUM_PASSWORD_LENGTH: int = 8
+
+    # Don't increase this number unless you have a good reason not to.
+    # Please read
+    # https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#maximum-password-lengths
+    MAXIMUM_PASSWORD_LENGTH: int = 16
+
+    JWT_ALGORITHM: str = "HS256"
+
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
+    class Config:
+        env_file = ".env"
+
+
+settings = Settings()
 
 logger.add(
     "output_{time:YYYY-MM-DD at HH:mm:ss}.log",
