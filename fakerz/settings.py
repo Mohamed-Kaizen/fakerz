@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     OPENAPI_URL: str = "/openapi.json"
 
-    ALLOWED_HOSTS: List[str] = ["127.0.0.1", "localhost"]
+    ALLOWED_HOSTS: List[str] = ["127.0.0.1", "localhost", "fakerz.herokuapp.com"]
 
     DEBUG: bool
 
@@ -47,8 +47,8 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    class Config:
-        env_file = ".env"
+    # class Config:
+    #     env_file = ".env"
 
 
 settings = Settings()
