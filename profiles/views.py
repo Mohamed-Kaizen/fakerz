@@ -67,5 +67,5 @@ async def login(user_input: schema.UserLogin) -> Dict[str, Any]:
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": {"username": fake.name(), "picture": f"https://images.unsplash.com{response.url.full_path}"}
+        "user": {"username": fake.name(), "email": fake.email(), "picture": f"https://images.unsplash.com{response.url.full_path}"}
     }
