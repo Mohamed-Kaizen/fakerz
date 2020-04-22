@@ -1,10 +1,12 @@
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 import httpx
 from faker import Faker
 from fakerz.settings import logger, settings
 from fastapi import APIRouter
+
 from . import schema, utils
+
 router = APIRouter()
 
 fake = Faker()
@@ -62,4 +64,8 @@ async def login(user_input: schema.UserLogin) -> Dict[str, Any]:
 
     response = await client.get(f"https://source.unsplash.com/800x400/?profile")
 
-    return {"access_token": access_token, "token_type": "bearer", "username": fake.name(), "image": f"https://images.unsplash.com{response.url.full_path}",}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {"username": fake.name(), "picture": f"https://images.unsplash.com{response.url.full_path}"}
+    }

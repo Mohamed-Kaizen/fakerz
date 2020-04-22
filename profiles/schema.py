@@ -2,6 +2,7 @@ from fakerz.settings import settings
 from pydantic import BaseModel, EmailStr, Field, validator
 from . import validators
 
+
 class UserLogin(BaseModel):
 
     password: str = Field(

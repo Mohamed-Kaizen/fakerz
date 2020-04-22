@@ -2,6 +2,7 @@ import jwt
 import pendulum
 from fakerz.settings import settings
 
+
 def create_access_token(*, data: dict, expires_in_minutes: int):
 
     expire = pendulum.now().add(minutes=expires_in_minutes)

@@ -1,3 +1,4 @@
+import sys
 from typing import List
 
 from pydantic import BaseSettings
@@ -52,10 +53,4 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-logger.add(
-    "output_{time:YYYY-MM-DD at HH:mm:ss}.log",
-    format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}",
-    backtrace=False,
-    diagnose=False,
-    rotation="12:00",
-)
+logger.add(sys.stderr, format="{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}")
