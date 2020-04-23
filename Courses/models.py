@@ -21,6 +21,8 @@ class Course(models.Model):
 
     title = fields.CharField(max_length=60)
 
+    cover = fields.TextField()
+
     categories = fields.ManyToManyField("models.Category", related_name="courses")
 
     is_draft = fields.BooleanField(default=True)

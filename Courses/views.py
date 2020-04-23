@@ -1,16 +1,24 @@
 from typing import Any, Dict, List
 
+import httpx
 from fakerz.settings import logger, settings
 from fastapi import APIRouter
 
-from . import schema, models
+from . import models, schema
 
 router = APIRouter()
 
 
 @router.post("/", response_model=models.Course_Pydantic)
 async def create_course(user_input: schema.CourseCreate):
-    course = models.Course(title=user_input.title)
+    client = httpx.AsyncClient()
+
+    response = await client.get("https://source.unsplash.com/400x400/?cover")
+
+    course = models.Course(
+        title=user_input.title,
+        cover=f"https://images.unsplash.com{response.url.full_path}",
+    )
     await course.save()
 
     for category in user_input.categories:
@@ -23,6 +31,7 @@ async def create_course(user_input: schema.CourseCreate):
 @router.get("/", response_model=List[models.Course_Pydantic])
 async def get_all_course():
     return await models.Course_Pydantic.from_queryset(models.Course.all())
+
 
 @router.get("/category/", response_model=List[models.Category_Pydantic])
 async def get_all_category():
