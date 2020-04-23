@@ -1,11 +1,10 @@
 import uvicorn
-
-
-from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-
+from Courses import views as courses_views
 from fakerz.settings import settings
+from fastapi import FastAPI
 from profiles import views as profiles_views
+from starlette.middleware.cors import CORSMiddleware
+from tortoise.contrib.fastapi import register_tortoise
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -24,7 +23,16 @@ app.add_middleware(
     allow_headers=settings.CORS_ALLOW_HEADERS,
 )
 
+register_tortoise(
+    app,
+    db_url=settings.DATABASE_URL,
+    modules={"models": settings.DB_MODELS},
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
+
 app.include_router(profiles_views.router, prefix="/profiles")
+app.include_router(courses_views.router, prefix="/courses")
 
 if __name__ == "__main__" and settings.DEBUG:
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="debug")

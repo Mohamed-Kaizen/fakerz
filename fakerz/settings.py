@@ -25,6 +25,10 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str
 
+    DATABASE_URL: str = "sqlite://./db.sqlite3"
+
+    DB_MODELS: List[str] = ["Courses.models"]
+
     CORS_ORIGINS: List[str] = ["*"]
 
     CORS_ALLOW_CREDENTIALS: bool = True
