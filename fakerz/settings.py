@@ -27,7 +27,7 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite://./db.sqlite3"
 
-    DB_MODELS: List[str] = ["Courses.models"]
+    DB_MODELS: List[str] = ["Courses.models", "inbox.models"]
 
     CORS_ORIGINS: List[str] = ["*"]
 

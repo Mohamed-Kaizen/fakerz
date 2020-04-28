@@ -3,6 +3,7 @@ from Courses import views as courses_views
 from fakerz.settings import settings
 from fastapi import FastAPI
 from profiles import views as profiles_views
+from inbox import views as inbox_views
 from starlette.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
 
@@ -33,6 +34,7 @@ register_tortoise(
 
 app.include_router(profiles_views.router, prefix="/profiles")
 app.include_router(courses_views.router, prefix="/courses")
+app.include_router(inbox_views.router, prefix="/inbox")
 
 if __name__ == "__main__" and settings.DEBUG:
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="debug")
